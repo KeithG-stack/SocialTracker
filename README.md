@@ -4,8 +4,8 @@
 **Industry**: Digital Marketing/Technology  
 **Developer**: Keith Gillespie 
 **Completion Date**: 05/12/2025  
-**GitHub Repository**: [Link to your repository]  
-**Trello**: [Link to Trello Board]  
+**GitHub Repository**: [\[Link to your repository\] ](https://github.com/KeithG-stack/SocialTracker) 
+**Trello**: [\[Link to Trello Board\] ](https://trello.com/b/wbwTH7Wq/social-app) 
 **Live Demo**: [Link to deployed application]  
 
 ## Business Problem
