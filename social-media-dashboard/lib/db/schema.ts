@@ -15,16 +15,29 @@ export const recommendationTypeEnum = pgEnum('recommendation_type', ['content', 
 export const recommendationStatusEnum = pgEnum('recommendation_status', ['new', 'viewed', 'applied', 'dismissed']);
 
 // Users table
-export const users = pgTable('users', {
-  id: uuid('id').defaultRandom().primaryKey(),
-  email: varchar('email', { length: 255 }).notNull().unique(),
-  name: varchar('name', { length: 100 }).notNull(),
-  image: varchar('image', { length: 255 }),
-  createdAt: timestamp('created_at').defaultNow(),
-  lastLogin: timestamp('last_login'),
-  role: userRoleEnum('role').default('viewer').notNull(),
+export const users = pgTable("users", {
+    id: serial("id").primaryKey(),
+    name: text("name"),
+    email: text("email").unique(),
+    image: text("image"),
+    role: text("role").default("user"),
+    createdAt: timestamp("created_at").defaultNow(),
 });
 
+export const accounts = pgTable("accounts", {
+    id: serial("id").primaryKey(),
+    userId: serial("user_id").references(() => users.id),
+    type: text("type"),
+    provider: text("provider"),
+    providerAccountId: text("provider_account_id"),
+    refresh_token: text("refresh_token"),
+    access_token: text("access_token"),
+    expires_at: timestamp("expires_at"),
+    token_type: text("token_type"),
+    scope: text("scope"),
+    id_token: text("id_token"),
+    session_state: text("session_state"),
+});
 // Teams table
 export const teams = pgTable('teams', {
   id: uuid('id').defaultRandom().primaryKey(),
@@ -289,3 +302,8 @@ export const contentRelations = relations(content, ({ one, many }) => ({
   platformPosts: many(platformPosts),
   calendarEvents: many(calendarEvents),
 }));
+
+export const schema = {
+    usersTable: users,
+    accountsTable: accounts
+};

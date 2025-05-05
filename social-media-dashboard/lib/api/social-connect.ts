@@ -1,6 +1,7 @@
 import { db } from "@/lib/db";
 import { socialAccounts } from "@/lib/db/schema";
 import { v4 as uuidv4 } from "uuid";
+import { eq } from "drizzle-orm";
 
 export async function connectSocialAccount(
   userId: string,
