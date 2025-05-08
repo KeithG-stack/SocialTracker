@@ -1,9 +1,6 @@
 // app/api/twitter-engagement/route.js
 import { auth } from '@/auth';
-import { getUserSocialAccounts } from '@/lib/data/accounts';
-import { Pool } from 'pg';
-
-const pool = new Pool({ connectionString: process.env.DATABASE_URL });
+import pool, { query } from '@/lib/db';
 
 export async function GET() {
   const session = await auth();
@@ -14,7 +11,12 @@ export async function GET() {
 
   try {
     const userId = session.user.id;
-    const twitterAccount = (await pool.query('SELECT access_token, provider_account_id FROM social_accounts WHERE user_id = $1 AND provider = $2', [userId, 'twitter'])).rows[0];
+    const result = await query(
+      'SELECT access_token, provider_account_id FROM social_accounts WHERE user_id = $1 AND provider = $2',
+      [userId, 'twitter']
+    );
+    
+    const twitterAccount = result.rows[0];
 
     if (!twitterAccount?.access_token || !twitterAccount?.provider_account_id) {
       return new Response(JSON.stringify({ error: 'No connected Twitter account' }), { status: 400 });

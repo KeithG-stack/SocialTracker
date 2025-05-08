@@ -1,4 +1,3 @@
-// components/dashboard/MainContent.js
 'use client';
 
 import useSWR from 'swr';

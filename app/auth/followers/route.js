@@ -1,6 +1,9 @@
 // app/api/followers/route.js
 import { auth } from '@/auth'; // Assuming you've configured NextAuth
 import { getUserSocialAccounts } from '@/lib/data/accounts'; // To get connected accounts
+import { Pool } from 'pg';
+
+const pool = new Pool({ connectionString: process.env.DATABASE_URL });
 
 export async function GET() {
   const session = await auth();
@@ -19,7 +22,7 @@ export async function GET() {
       try {
         switch (provider) {
           case 'twitter':
-            // Replace with actual Twitter API call using accessToken and providerAccountId
+            // Twitter API call using accessToken and providerAccountId
             const twitterResponse = await fetch(`https://api.twitter.com/2/users/${providerAccountId}?fields=public_metrics`, {
               headers: {
                 Authorization: `Bearer ${accessToken}`, // Twitter uses Bearer tokens
@@ -28,25 +31,24 @@ export async function GET() {
             const twitterData = await twitterResponse.json();
             return twitterData?.data?.public_metrics?.followers_count || 0;
           case 'instagram':
-            // Replace with actual Instagram Graph API call using accessToken
+            // Instagram Graph API call using accessToken
             const instagramResponse = await fetch(`https://graph.instagram.com/me?fields=followers_count&access_token=${accessToken}`);
             const instagramData = await instagramResponse.json();
             return instagramData?.followers_count || 0;
           case 'facebook':
-            // Replace with actual Facebook Graph API call using accessToken and providerAccountId
-            const facebookResponse = await fetch(`https://graph.facebook.com/<span class="math-inline">\{providerAccountId\}?fields\=followers\_count&access\_token\=</span>{accessToken}`);
+            // Facebook Graph API call using accessToken and providerAccountId
+            const facebookResponse = await fetch(`https://graph.facebook.com/${providerAccountId}?fields=followers_count&access_token=${accessToken}`);
             const facebookData = await facebookResponse.json();
             return facebookData?.followers_count || 0;
           case 'linkedin':
-            // Replace with actual LinkedIn API call using accessToken
+            // LinkedIn API call using accessToken
             const linkedinResponse = await fetch('https://api.linkedin.com/v2/me', {
               headers: {
                 Authorization: `Bearer ${accessToken}`,
               },
             });
             const linkedinUserData = await linkedinResponse.json();
-            // You might need to make a subsequent call to get follower counts for profiles or pages
-            console.log('LinkedIn User Data:', linkedinUserData); // Log to inspect the structure
+            // For LinkedIn, you might need to make a subsequent call to get follower counts
             return 0; // Placeholder - LinkedIn API for followers is more complex
           default:
             return 0;
@@ -59,10 +61,12 @@ export async function GET() {
 
     // Fetch followers for each connected account
     const followerPromises = accounts.map(async (account) => {
-      // You'll need to retrieve the access token from your database based on account.provider and userId
-      // For simplicity here, I'm assuming you can fetch it within this function or pass it along.
-      // A better approach might be to fetch all tokens upfront.
-      const socialAccountDetails = await pool.query('SELECT access_token, provider_account_id FROM social_accounts WHERE user_id = $1 AND provider = $2', [userId, account.provider]);
+      // Get access token and provider account ID for this social account
+      const socialAccountDetails = await pool.query(
+        'SELECT access_token, provider_account_id FROM social_accounts WHERE user_id = $1 AND provider = $2', 
+        [userId, account.provider]
+      );
+      
       const { access_token, provider_account_id } = socialAccountDetails.rows[0] || {};
 
       if (access_token && provider_account_id) {
@@ -82,9 +86,3 @@ export async function GET() {
     return new Response(JSON.stringify({ error: 'Failed to fetch followers' }), { status: 500 });
   }
 }
-
-// Import your database connection pool
-import { Pool } from 'pg';
-const pool = new Pool({
-  connectionString: process.env.DATABASE_URL,
-});

@@ -1,7 +1,22 @@
+'use client';
+
 import Link from 'next/link';
 import React from 'react';
+import { useSession } from 'next-auth/react';
+import { useRouter } from 'next/navigation';
+import { useEffect } from 'react';
 
 export default function LandingPage() {
+  const { data: session, status } = useSession();
+  const router = useRouter();
+  
+  // If user is already logged in, redirect to dashboard
+  useEffect(() => {
+    if (status === 'authenticated') {
+      router.push('/dashboard');
+    }
+  }, [status, router]);
+
   return (
     <div className="bg-gray-100 min-h-screen flex flex-col">
       <header className="bg-white shadow py-6 px-8">
@@ -10,10 +25,16 @@ export default function LandingPage() {
           <nav>
             <Link href="/#features" className="text-gray-700 hover:text-indigo-600 mr-4">Features</Link>
             <Link href="/#pricing" className="text-gray-700 hover:text-indigo-600 mr-4">Pricing</Link>
-            <Link href="/#contact" className="text-gray-700 hover:text-indigo-600">Contact</Link>
-            <Link href="/dashboard" className="bg-indigo-600 text-white py-2 px-4 rounded-md hover:bg-indigo-700">
-              Sign In
-            </Link>
+            <Link href="/#contact" className="text-gray-700 hover:text-indigo-600 mr-4">Contact</Link>
+            {status === 'authenticated' ? (
+              <Link href="/dashboard" className="bg-indigo-600 text-white py-2 px-4 rounded-md hover:bg-indigo-700">
+                Dashboard
+              </Link>
+            ) : (
+              <Link href="/signin" className="bg-indigo-600 text-white py-2 px-4 rounded-md hover:bg-indigo-700">
+                Sign In
+              </Link>
+            )}
           </nav>
         </div>
       </header>
@@ -26,7 +47,7 @@ export default function LandingPage() {
           <p className="text-lg text-gray-700 mb-6">
             Stop juggling multiple platforms. Our Next.js dashboard provides real-time analytics, collaboration tools, and AI-powered insights to supercharge your social media strategy.
           </p>
-          <Link href="/dashboard" className="bg-indigo-600 text-white py-3 px-6 rounded-md text-lg font-semibold hover:bg-indigo-700">
+          <Link href="/signin" className="bg-indigo-600 text-white py-3 px-6 rounded-md text-lg font-semibold hover:bg-indigo-700">
             Get Started for Free
           </Link>
         </div>
@@ -74,7 +95,6 @@ export default function LandingPage() {
         <div className="container mx-auto text-center">
           <h2 className="text-3xl font-semibold text-gray-900 mb-8">Pricing</h2>
           <p className="text-lg text-gray-700 mb-6">Simple and flexible pricing plans to fit your needs.</p>
-          {/* Add your pricing tiers here */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             <div className="bg-white rounded-lg shadow-md p-8">
               <h4 className="text-xl font-semibold text-gray-900 mb-2">Basic</h4>
@@ -84,11 +104,11 @@ export default function LandingPage() {
                 <li>Basic analytics</li>
                 <li>Content scheduling</li>
               </ul>
-              <Link href="/dashboard" className="bg-indigo-600 text-white py-2 px-4 rounded-md hover:bg-indigo-700">
+              <Link href="/signin" className="bg-indigo-600 text-white py-2 px-4 rounded-md hover:bg-indigo-700">
                 Get Started
               </Link>
             </div>
-            {/* More pricing tiers */}
+            {/* Add more pricing tiers here */}
           </div>
         </div>
       </section>
@@ -97,7 +117,6 @@ export default function LandingPage() {
         <div className="container mx-auto text-center">
           <h2 className="text-3xl font-semibold text-gray-900 mb-8">Contact Us</h2>
           <p className="text-lg text-gray-700 mb-6">Have questions? Reach out to our team.</p>
-          {/* Add a contact form or contact information here */}
           <div className="bg-white rounded-lg shadow-md p-8">
             <p className="text-gray-700">Email: support@socialdashboard.com</p>
             <p className="text-gray-700">Phone: (555) 123-4567</p>
