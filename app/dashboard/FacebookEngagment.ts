@@ -1,14 +1,33 @@
-// components/dashboard/FacebookEngagement.js
+// components/dashboard/FacebookEngagement.tsx
 'use client';
-
 import useSWR from 'swr';
 
-const fetcher = (...args) => fetch(...args).then(res => res.json());
+// Type definitions
+interface Post {
+  message: string;
+  likes: number;
+  comments: number;
+  shares: number;
+  created_time: string;
+}
 
-export default function FacebookEngagement() {
-  const { data, error, isLoading } = useSWR('/api/facebook-engagement', fetcher, {
-    refreshInterval: 60000,
-  });
+interface EngagementData {
+  engagement: Post[];
+  error?: string;
+}
+
+// Define the fetcher function with proper type annotations
+const fetcher = <T,>(...args: Parameters<typeof fetch>): Promise<T> => 
+  fetch(...args).then(res => res.json());
+
+export default function FacebookEngagement(): JSX.Element {
+  const { data, error, isLoading } = useSWR<EngagementData, Error>(
+    '/api/facebook-engagement', 
+    fetcher, 
+    {
+      refreshInterval: 60000,
+    }
+  );
 
   return (
     <div className="bg-white shadow-md rounded-lg p-6">

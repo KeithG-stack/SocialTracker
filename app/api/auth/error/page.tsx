@@ -40,7 +40,7 @@ export default function AuthError() {
           <Link href="/" className="text-indigo-600 hover:text-indigo-800 mr-4">
             Return to Home
           </Link>
-          <Link href="/auth/signin" className="bg-indigo-600 text-white py-2 px-4 rounded-md hover:bg-indigo-700">
+          <Link href="/signin" className="bg-indigo-600 text-white py-2 px-4 rounded-md hover:bg-indigo-700">
             Try Again
           </Link>
         </div>

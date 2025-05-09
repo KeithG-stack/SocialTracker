@@ -5,18 +5,14 @@ import { useRouter } from 'next/navigation';
 import { useEffect } from 'react';
 import Sidebar from './Sidebar';
 import Header from './Header';
+import { redirect } from 'next/navigation';
 
-
-export default function DashboardLayout({ children }: { children: React.ReactNode }) {
-  const { data: session, status } = useSession();
-  const router = useRouter();
-  
-
-  useEffect(() => {
-    if (status === 'unauthenticated') {
-      router.push('/signin?callbackUrl=/dashboard');
-    }
-  }, [status, router]);
+export default function DashboardLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
+  const { status } = useSession();
 
   if (status === 'loading') {
     return (
@@ -29,7 +25,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
   }
 
   if (status === 'unauthenticated') {
-    return null; // Will redirect in the useEffect
+    redirect('/signin');
   }
 
   return (

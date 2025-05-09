@@ -4,7 +4,7 @@ import bcrypt from 'bcryptjs';
 
 const pool = new Pool({ connectionString: process.env.DATABASE_URL });
 
-export async function POST(req) {
+export async function POST(req: Request) {
   try {
     const { name, email, password } = await req.json();
 

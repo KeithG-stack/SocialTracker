@@ -2,7 +2,6 @@
 import NextAuth from 'next-auth';
 import CredentialsProvider from 'next-auth/providers/credentials';
 import { neon } from '@neondatabase/serverless';
-
 const databaseUrl = process.env.DATABASE_URL;
 if (!databaseUrl) {
   throw new Error('DATABASE_URL is not defined in environment variables');
@@ -71,7 +70,7 @@ export const authOptions = {
     strategy: 'jwt' as const,
   },
   pages: {
-    signIn: '/auth/signin',
+    signIn: '/signin',
     signOut: '/',
     error: '/auth/error',
   },
