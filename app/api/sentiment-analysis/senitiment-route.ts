@@ -1,5 +1,9 @@
-// app/api/sentiment-analysis/route.ts
-import { auth } from '@/auth';
+
+// Update the import path below to the correct location of your auth module:
+// Update the import path below to the correct location of your auth module:
+import { auth } from '../../auth'; // Adjust this path as needed to point to your actual auth file
+// If your 'auth' module is located elsewhere, adjust the path accordingly.
+// Adjust the path as needed based on your actual file location.
 import { Pool } from 'pg';
 import OpenAI from 'openai';
 import { NextRequest, NextResponse } from 'next/server';

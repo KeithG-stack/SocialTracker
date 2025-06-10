@@ -4,7 +4,7 @@
 import useSWR from 'swr';
 import { useState, useEffect } from 'react';
 
-const fetcher = (url, body) => fetch(url, {
+const fetcher = (url: string, body: any) => fetch(url, {
   method: 'POST',
   headers: { 'Content-Type': 'application/json' },
   body: JSON.stringify(body),
@@ -26,17 +26,17 @@ export default function SentimentAnalysis() {
 
   useEffect(() => {
     if (selectedPlatform === 'twitter' && twitterData?.engagement) {
-      setContentToAnalyze(twitterData.engagement.map(tweet => tweet.text));
+      setContentToAnalyze(twitterData.engagement.map((tweet: { text: string }) => tweet.text));
     } else if (selectedPlatform === 'instagram' && instagramData?.engagement) {
-      setContentToAnalyze(instagramData.engagement.map(post => post.caption));
+      setContentToAnalyze(instagramData.engagement.map((post: { caption: string }) => post.caption));
     } else if (selectedPlatform === 'facebook' && facebookData?.engagement) {
-      setContentToAnalyze(facebookData.engagement.map(post => post.message));
+      setContentToAnalyze(facebookData.engagement.map((post: { message: string }) => post.message));
     } else {
       setContentToAnalyze([]);
     }
   }, [selectedPlatform, twitterData?.engagement, instagramData?.engagement, facebookData?.engagement]);
 
-  const handlePlatformChange = (event) => {
+  const handlePlatformChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
     setSelectedPlatform(event.target.value);
   };
 

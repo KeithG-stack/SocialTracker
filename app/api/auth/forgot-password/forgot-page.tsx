@@ -9,7 +9,15 @@ export default function ForgotPasswordPage() {
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
 
-  const handleSubmit = async (e) => {
+  interface ForgotPasswordRequest {
+    email: string;
+  }
+
+  interface ForgotPasswordErrorResponse {
+    error: string;
+  }
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>): Promise<void> => {
     e.preventDefault();
     setError('');
     setLoading(true);
@@ -18,16 +26,16 @@ export default function ForgotPasswordPage() {
       const response = await fetch('/api/auth/forgot-password', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email }),
+        body: JSON.stringify({ email } as ForgotPasswordRequest),
       });
 
       if (!response.ok) {
-        const data = await response.json();
+        const data: ForgotPasswordErrorResponse = await response.json();
         throw new Error(data.error || 'Something went wrong');
       }
 
       setIsSubmitted(true);
-    } catch (err) {
+    } catch (err: any) {
       setError(err.message);
     } finally {
       setLoading(false);

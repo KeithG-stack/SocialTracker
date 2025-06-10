@@ -1,4 +1,10 @@
-import { auth } from 'next-auth/react';
+import auth from 'next-auth';
+// Make sure the following import path points to where 'authOptions' is actually exported.
+// For example, if 'authOptions' is exported from '../auth/[...nextauth]/authOptions', use:
+// TODO: Update the import path below to the actual location where 'authOptions' is exported.
+// For example, if 'authOptions' is exported from '../auth/[...nextauth]/route', use:
+import { authOptions } from '../auth/[...nextauth]/route';
+// If it is not exported anywhere, you need to export it from the appropriate file.
 import { Pool, QueryResult } from 'pg';
 import { NextResponse } from 'next/server';
 
@@ -61,8 +67,8 @@ interface PostEngagement {
 // Initialize database connection
 const pool = new Pool({ connectionString: process.env.DATABASE_URL });
 
-export async function GET(): Promise<NextResponse> {
-  const session = await auth() as Session | null;
+export async function GET() {
+  const session = await auth(authOptions) as Session | null;
   
   if (!session?.user?.id) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });

@@ -1,12 +1,22 @@
-// components/dashboard/InstagramEngagement.js
 'use client';
 
 import useSWR from 'swr';
 
-const fetcher = (...args) => fetch(...args).then(res => res.json());
+type EngagementPost = {
+  id: string; // Change to number if your id is numeric
+  caption: string;
+  likes: number;
+  comments: number;
+};
+
+type EngagementData = {
+  engagement: EngagementPost[];
+};
+
+const fetcher = (url: string) => fetch(url).then(res => res.json());
 
 export default function InstagramEngagement() {
-  const { data, error, isLoading } = useSWR('/api/instagram-engagement', fetcher, {
+  const { data, error, isLoading } = useSWR<EngagementData>('/api/instagram-engagement', fetcher, {
     refreshInterval: 60000,
   });
 
@@ -19,9 +29,13 @@ export default function InstagramEngagement() {
         <p className="text-red-500">Error fetching engagement</p>
       ) : data?.engagement ? (
         <ul>
-          {data.engagement.map((post) => (
-            <li key={post.caption} className="mb-4 border-b pb-2 last:border-b-0">
-              <p className="text-gray-800">{post.caption.substring(0, 50)}...</p>
+          {data.engagement.map((post, idx) => (
+            <li key={post.id ?? idx} className="mb-4 border-b pb-2 last:border-b-0">
+              <p className="text-gray-800">
+                {post.caption.length > 50
+                  ? `${post.caption.substring(0, 50)}...`
+                  : post.caption}
+              </p>
               <div className="flex space-x-4 mt-2 text-sm text-gray-600">
                 <span>Likes: {post.likes}</span>
                 <span>Comments: {post.comments}</span>

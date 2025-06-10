@@ -3,10 +3,21 @@
 
 import useSWR from 'swr';
 
-const fetcher = (...args) => fetch(...args).then(res => res.json());
+const fetcher = (...args: Parameters<typeof fetch>) => fetch(...args).then(res => res.json());
+
+interface Tweet {
+  text: string;
+  likes: number;
+  retweets: number;
+  replies: number;
+}
+
+interface TwitterEngagementResponse {
+  engagement: Tweet[];
+}
 
 export default function TwitterEngagement() {
-  const { data, error, isLoading } = useSWR('/api/twitter-engagement', fetcher, {
+  const { data, error, isLoading } = useSWR<TwitterEngagementResponse>('/api/twitter-engagement', fetcher, {
     refreshInterval: 60000,
   });
 
