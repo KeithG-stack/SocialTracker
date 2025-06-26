@@ -1,4 +1,3 @@
-// app/auth/error/page.js
 'use client';
 
 import { useSearchParams } from 'next/navigation';
@@ -47,4 +46,4 @@ export default function AuthError() {
       </div>
     </div>
   );
-}
+} 

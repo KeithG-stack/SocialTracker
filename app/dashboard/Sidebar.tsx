@@ -1,49 +1,34 @@
-// components/dashboard/Sidebar.tsx
 'use client';
 import Link from 'next/link';
 import { useSession, signOut } from 'next-auth/react';
 import { useEffect, useState } from 'react';
-import { getUserSocialAccounts } from '@/lib/data/account'; // Import your database function
 
-// Import or extend the Session type to include id
-import { Session } from 'next-auth';
-
-// Extend the built-in Session type to include id on user
-interface CustomSession extends Session {
-  user: {
-    name?: string | null;
-    email?: string | null;
-    image?: string | null;
-    id: string;  // Add the id property that your app is using
-  }
-}
-
-// Define types for social accounts - match the actual return type from getUserSocialAccounts
 interface SocialAccount {
   id: string;
   provider: string;
   provider_account_id: string;
-  // Remove userId if it's not in the returned object
-  // Add other fields as needed
 }
 
 export default function Sidebar() {
-  const { data: session } = useSession() as { data: CustomSession | null };
+  const { data: session } = useSession();
   const [connectedAccounts, setConnectedAccounts] = useState<SocialAccount[]>([]);
 
   useEffect(() => {
     async function fetchAccounts() {
-      if (session?.user?.id) {
+      const user = session?.user as { id?: string; sub?: string };
+      const userId = user?.id || user?.sub;
+      if (userId) {
         try {
-          const accounts = await getUserSocialAccounts(session.user.id);
-          setConnectedAccounts(accounts as SocialAccount[]);
+          const res = await fetch(`/api/social-accounts?userId=${userId}`);
+          const accounts = await res.json();
+          setConnectedAccounts(accounts);
         } catch (error) {
           console.error("Error fetching social accounts:", error);
         }
       }
     }
     fetchAccounts();
-  }, [session?.user?.id]);
+  }, [session?.user]);
 
   return (
     <aside className="fixed top-0 left-0 h-full w-64 bg-white shadow-md z-10">

@@ -1,4 +1,12 @@
-// app/api/auth/[...nextauth]/route.ts
-import { handlers } from '../../../auth';
+import { NextRequest, NextResponse } from 'next/server';
 
-export const { GET, POST } = handlers;
+export async function POST(request: NextRequest) {
+  interface QueryResult {
+    rows: Array<{
+      id: number;
+      email: string;
+      name: string;
+    }>;
+  }
+  return NextResponse.json({ message: 'User registered!' });
+}

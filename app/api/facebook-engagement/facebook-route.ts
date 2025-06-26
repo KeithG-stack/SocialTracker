@@ -1,12 +1,12 @@
+// facebook-route.ts
+
 import auth from 'next-auth';
-// Make sure the following import path points to where 'authOptions' is actually exported.
-// For example, if 'authOptions' is exported from '../auth/[...nextauth]/authOptions', use:
-// TODO: Update the import path below to the actual location where 'authOptions' is exported.
-// For example, if 'authOptions' is exported from '../auth/[...nextauth]/route', use:
-import { authOptions } from '../auth/[...nextauth]/route';
-// If it is not exported anywhere, you need to export it from the appropriate file.
+// Correctly import authOptions from the root auth.ts file
+import { authOptions } from '../../auth';
 import { Pool, QueryResult } from 'pg';
 import { NextResponse } from 'next/server';
+
+
 
 // Type definitions
 interface Session {
