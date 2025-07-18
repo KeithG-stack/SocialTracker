@@ -1,12 +1,16 @@
-import { NextRequest, NextResponse } from 'next/server';
+import NextAuth from "next-auth";
+import GoogleProvider from "next-auth/providers/google";
 
-export async function POST(request: NextRequest) {
-  interface QueryResult {
-    rows: Array<{
-      id: number;
-      email: string;
-      name: string;
-    }>;
-  }
-  return NextResponse.json({ message: 'User registered!' });
-}
+
+const handler = NextAuth({
+  providers: [
+    GoogleProvider({
+      clientId: process.env.GOOGLE_CLIENT_ID ?? "your-client-id",
+      clientSecret: process.env.GOOGLE_CLIENT_SECRET ?? "your-client-secret",
+    }),
+    // Add more providers here
+  ],
+  // Add more NextAuth options here as needed
+});
+
+export { handler as GET, handler as POST };
