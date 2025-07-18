@@ -31,6 +31,7 @@ export default function SignInPage() {
         email,
         password,
       });
+      console.log('[SignInPage] Sign-in result:', result);
 
       // Check if sign-in was successful
       if (!result?.error) {

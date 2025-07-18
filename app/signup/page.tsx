@@ -26,20 +26,23 @@ export default function SignUpPage() {
     setLoading(true); // Set loading state to true
 
     try {
+
       // API call to register the user
       const response = await fetch('/api/auth/register', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ name, email, password }),
       });
-
+      console.log('[SignUpPage] Registration response:', response);
       // Check if the registration was successful
       if (!response.ok) {
         const data = await response.json();
         throw new Error(data.error || 'Failed to sign up');
       }
 
+      console.log('[SignUpPage] User registered successfully:', { name, email });
       // If registration is successful, automatically sign in the user
+      
       const signInResult = await signIn('credentials', {
         redirect: false, // Do not redirect automatically, handle manually
         email,
