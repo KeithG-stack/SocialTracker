@@ -4,6 +4,24 @@ import GoogleProvider from "next-auth/providers/google";
 import { neon } from '@neondatabase/serverless';
 import bcrypt from 'bcryptjs';
 
+// Extend NextAuth types to include 'id' on user and session
+declare module "next-auth" {
+  interface Session {
+    user: {
+      id: string;
+      name?: string | null;
+      email?: string | null;
+      image?: string | null;
+    };
+  }
+  interface User {
+    id: string;
+    name?: string | null;
+    email?: string | null;
+    image?: string | null;
+  }
+}
+
 const sql = neon(process.env.DATABASE_URL!);
 
 const handler = NextAuth({
@@ -106,7 +124,9 @@ const handler = NextAuth({
     async session({ session, token }) {
       
       if (token.id) {
-        session.user.id = token.id as string;
+        if (session.user) {
+          session.user.id = token.id as string;
+        }
       }
       return session;
     },

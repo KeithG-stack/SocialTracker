@@ -70,7 +70,7 @@ const authConfig = {
   },
 
   callbacks: {
-    async signIn({ user, account, profile }) {
+    async signIn({ user, account, profile }: { user: any, account: any, profile?: any }) {
       if (account?.provider === "google") {
         try {
           // Check if user exists
@@ -102,14 +102,14 @@ const authConfig = {
       return true;
     },
 
-    async jwt({ token, user, account }) {
+    async jwt({ token, user, account }: { token: any, user?: any, account?: any }) {
       if (user) {
         token.id = user.id;
       }
       return token;
     },
 
-    async session({ session, token }) {
+    async session({ session, token }: { session: any, token: any }) {
       if (token.id) {
         session.user.id = token.id as string;
       }
