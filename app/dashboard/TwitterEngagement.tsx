@@ -1,6 +1,15 @@
-// components/dashboard/TwitterEngagement.js
+/**
+ * TwitterEngagement.tsx
+ * 
+ * Dashboard widget displaying recent Twitter engagement using dummy data.
+ * Shows tweet text and engagement metrics (likes, retweets, replies).
+ */
+
 'use client';
 
+/**
+ * Represents a single tweet's engagement metrics.
+ */
 interface Tweet {
   text: string;
   likes: number;
@@ -8,6 +17,9 @@ interface Tweet {
   replies: number;
 }
 
+/**
+ * Response structure for Twitter engagement data.
+ */
 interface TwitterEngagementResponse {
   engagement: Tweet[];
 }
@@ -19,6 +31,9 @@ const dummyData: TwitterEngagementResponse = {
   ],
 };
 
+/**
+ * TwitterEngagement component displays a list of recent tweets and their engagement.
+ */
 export default function TwitterEngagement() {
   const data = dummyData;
 

@@ -1,4 +1,10 @@
-// components/dashboard/SentimentAnalysis.js
+/**
+ * SentimentAnalysis.tsx
+ * 
+ * Dashboard widget for displaying sentiment analysis of social media content.
+ * Allows platform selection and displays dummy sentiment results.
+ */
+
 'use client';
 
 import { useState } from 'react';
@@ -9,6 +15,9 @@ const dummySentiment: Record<string, string> = {
   facebook: 'Facebook engagement is mostly positive.',
 };
 
+/**
+ * SentimentAnalysis component displays sentiment for selected platform.
+ */
 export default function SentimentAnalysis() {
   const [selectedPlatform, setSelectedPlatform] = useState('twitter');
 

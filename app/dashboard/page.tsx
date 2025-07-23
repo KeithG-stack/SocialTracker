@@ -1,3 +1,9 @@
+/**
+ * page.tsx
+ * 
+ * Main dashboard page displaying charts and engagement widgets.
+ */
+
 'use client';
 
 import FacebookEngagement from './FacebookEngagement';
@@ -25,6 +31,9 @@ const lineData = [
   { name: 'Sun', Facebook: 70, Instagram: 60, Twitter: 40 },
 ];
 
+/**
+ * DashboardPage component renders the dashboard overview, charts, and widgets.
+ */
 export default function DashboardPage() {
   return (
     <div className="p-8 space-y-8">

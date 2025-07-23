@@ -1,7 +1,16 @@
+/**
+ * MainContent.tsx
+ * 
+ * Dashboard main content area with overview cards and recent activity.
+ */
+
 'use client';
 
 import React from 'react';
 
+/**
+ * MainContent component displays dashboard summary and recent activity.
+ */
 const MainContent = () => {
   return (
     <div className="ml-64 p-8">

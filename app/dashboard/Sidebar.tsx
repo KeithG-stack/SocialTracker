@@ -1,15 +1,28 @@
+/**
+ * Sidebar.tsx
+ * 
+ * Dashboard sidebar navigation component.
+ * Displays navigation links, connected social accounts, and sign out button.
+ */
+
 'use client';
 import Link from 'next/link';
 import { useSession, signOut } from 'next-auth/react';
 import { useEffect, useState } from 'react';
 import { usePathname } from 'next/navigation';
 
+/**
+ * Represents a connected social account.
+ */
 interface SocialAccount {
   id: string;
   provider: string;
   provider_account_id: string;
 }
 
+/**
+ * Sidebar component for dashboard navigation and account info.
+ */
 export default function Sidebar() {
   const { data: session } = useSession();
   const [connectedAccounts, setConnectedAccounts] = useState<SocialAccount[]>([]);
@@ -34,7 +47,7 @@ export default function Sidebar() {
 
   const navLinks = [
     { href: '/dashboard', label: 'Dashboard' },
-    { href: '/dashboard/analytics', label: 'Analytics' },
+    { href: '/dashboard/content-calendar', label: 'Content Calendar' },
     // Add more links as needed
   ];
 
