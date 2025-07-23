@@ -20,23 +20,24 @@ interface EngagementData {
 const fetcher = <T,>(...args: Parameters<typeof fetch>): Promise<T> => 
   fetch(...args).then(res => res.json());
 
+const dummyData = {
+  engagement: [
+    { message: "Test post", likes: 10, comments: 2, shares: 1, created_time: "2023-01-01" }
+  ]
+};
+
 export default function FacebookEngagement(): JSX.Element {
-  const { data, error, isLoading } = useSWR<EngagementData, Error>(
-    '/api/facebook-engagement', 
-    fetcher, 
-    {
-      refreshInterval: 60000,
-    }
-  );
+  // Replace SWR with dummyData for now
+  const data = dummyData;
 
   return (
     <div className="bg-white shadow-md rounded-lg p-6">
       <h3 className="text-lg font-semibold text-gray-700 mb-2">Recent Facebook Engagement</h3>
-      {isLoading ? (
+      {/* {isLoading ? (
         <p className="text-gray-500">Loading...</p>
       ) : error ? (
         <p className="text-red-500">Error fetching engagement</p>
-      ) : data?.engagement ? (
+      ) : data?.engagement ? ( */}
         <ul>
           {data.engagement.map((post) => (
             <li key={post.created_time} className="mb-4 border-b pb-2 last:border-b-0">
@@ -50,9 +51,9 @@ export default function FacebookEngagement(): JSX.Element {
           ))}
           {data.engagement.length === 0 && <p className="text-gray-500 italic">No recent posts found.</p>}
         </ul>
-      ) : (
+      {/* ) : (
         <p className="text-gray-500">No engagement data available.</p>
-      )}
+      )} */}
     </div>
   );
 }

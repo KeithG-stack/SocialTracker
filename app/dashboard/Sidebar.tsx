@@ -2,6 +2,7 @@
 import Link from 'next/link';
 import { useSession, signOut } from 'next-auth/react';
 import { useEffect, useState } from 'react';
+import { usePathname } from 'next/navigation';
 
 interface SocialAccount {
   id: string;
@@ -12,6 +13,7 @@ interface SocialAccount {
 export default function Sidebar() {
   const { data: session } = useSession();
   const [connectedAccounts, setConnectedAccounts] = useState<SocialAccount[]>([]);
+  const pathname = usePathname();
 
   useEffect(() => {
     async function fetchAccounts() {
@@ -30,6 +32,12 @@ export default function Sidebar() {
     fetchAccounts();
   }, [session?.user]);
 
+  const navLinks = [
+    { href: '/dashboard', label: 'Dashboard' },
+    { href: '/dashboard/analytics', label: 'Analytics' },
+    // Add more links as needed
+  ];
+
   return (
     <aside className="fixed top-0 left-0 h-full w-64 bg-white shadow-md z-10">
       <div className="p-6">
@@ -38,16 +46,22 @@ export default function Sidebar() {
         </Link>
       </div>
       <nav className="mt-6">
-        <Link href="/dashboard" className="block py-2 px-4 text-gray-700 hover:bg-gray-100 hover:text-indigo-600">
-          Overview
-        </Link>
-        <Link href="/dashboard/analytics" className="block py-2 px-4 text-gray-700 hover:bg-gray-100 hover:text-indigo-600">
-          Analytics
-        </Link>
-        <Link href="/dashboard/content" className="block py-2 px-4 text-gray-700 hover:bg-gray-100 hover:text-indigo-600">
-          Content Calendar
-        </Link>
-        {/* Add more navigation links */}
+        <ul className="space-y-2">
+          {navLinks.map(link => (
+            <li key={link.href}>
+              <Link
+                href={link.href}
+                className={`block py-2 px-4 rounded transition-colors ${
+                  pathname === link.href
+                    ? 'bg-blue-600 text-white font-semibold'
+                    : 'text-gray-700 hover:bg-blue-100'
+                }`}
+              >
+                {link.label}
+              </Link>
+            </li>
+          ))}
+        </ul>
       </nav>
       <div className="p-6 mt-auto">
         <h3 className="text-sm font-semibold text-gray-500 uppercase mb-2">Connected Accounts</h3>
